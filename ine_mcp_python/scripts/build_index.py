@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from ine_mcp.api.client import INEClient
-from ine_mcp.embeddings.search import build_index_from_api
+from ine_mcp.embeddings.search import SemanticSearchEngine
 
 logging.basicConfig(
     level=logging.INFO,
