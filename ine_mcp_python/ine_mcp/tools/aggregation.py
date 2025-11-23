@@ -83,6 +83,7 @@ class DataAggregator:
         VECTORIZED date parsing for INE formats
 
         Handles all INE date formats using Pandas string operations (no loops!):
+        - Unix timestamps in milliseconds (e.g., 1706742000000)
         - 2024M03 (monthly)
         - 2024Q1 (quarterly)
         - 20240315 (daily)
@@ -91,57 +92,76 @@ class DataAggregator:
         Performance: 10-100x faster than row-by-row parsing
 
         Args:
-            date_series: Pandas Series of date strings
+            date_series: Pandas Series of date strings or numeric timestamps
 
         Returns:
             Pandas Series of datetime objects
         """
-        # Convert to string and clean
-        dates = date_series.astype(str).str.strip()
-
         # Initialize result series
-        result = pd.Series([pd.NaT] * len(dates), index=dates.index)
+        result = pd.Series([pd.NaT] * len(date_series), index=date_series.index)
+
+        # Handle Unix timestamps (milliseconds since epoch)
+        # INE API returns dates like 1706742000000 for some series
+        numeric_mask = pd.to_numeric(date_series, errors='coerce').notna()
+        if numeric_mask.any():
+            timestamps = pd.to_numeric(date_series[numeric_mask], errors='coerce')
+            # Convert milliseconds to datetime
+            result[numeric_mask] = pd.to_datetime(timestamps, unit='ms', errors='coerce')
+
+        # For remaining dates, convert to string and clean
+        remaining_mask = result.isna()
+        if not remaining_mask.any():
+            return result
+
+        dates = date_series[remaining_mask].astype(str).str.strip()
 
         # Handle monthly format: "2024M03" → "2024-03-01"
-        monthly_mask = dates.str.contains("M", case=False, na=False)
-        if monthly_mask.any():
+        monthly_mask_local = dates.str.contains("M", case=False, na=False)
+        if monthly_mask_local.any():
             monthly_cleaned = (
-                dates[monthly_mask]
+                dates[monthly_mask_local]
                 .str.upper()
                 .str.replace("M", "-", regex=False)
                 + "-01"
             )
-            result[monthly_mask] = pd.to_datetime(monthly_cleaned, errors="coerce")
+            # Map back to original indices
+            original_indices = dates[monthly_mask_local].index
+            result[original_indices] = pd.to_datetime(monthly_cleaned, errors="coerce")
 
         # Handle quarterly format: "2024Q1" → first month of quarter
-        quarterly_mask = dates.str.contains("Q", case=False, na=False) & result.isna()
-        if quarterly_mask.any():
-            quarterly_dates = dates[quarterly_mask].str.upper()
-            # Extract year and quarter
-            years = quarterly_dates.str[:4].astype(int)
-            quarters = quarterly_dates.str[-1].astype(int)
-            # Convert quarter to month (Q1→01, Q2→04, Q3→07, Q4→10)
-            months = (quarters - 1) * 3 + 1
-            result[quarterly_mask] = pd.to_datetime(
-                years.astype(str) + "-" + months.astype(str).str.zfill(2) + "-01",
-                errors="coerce",
-            )
+        still_remaining = result.isna()
+        if still_remaining.any():
+            dates_remaining = date_series[still_remaining].astype(str).str.strip()
+            quarterly_mask_local = dates_remaining.str.contains("Q", case=False, na=False)
+            if quarterly_mask_local.any():
+                quarterly_dates = dates_remaining[quarterly_mask_local].str.upper()
+                # Extract year and quarter
+                years = quarterly_dates.str[:4].astype(int)
+                quarters = quarterly_dates.str[-1].astype(int)
+                # Convert quarter to month (Q1→01, Q2→04, Q3→07, Q4→10)
+                months = (quarters - 1) * 3 + 1
+                original_indices = quarterly_dates.index
+                result[original_indices] = pd.to_datetime(
+                    years.astype(str) + "-" + months.astype(str).str.zfill(2) + "-01",
+                    errors="coerce",
+                )
 
         # Handle standard formats (YYYYMMDD, YYYY-MM-DD, etc.)
-        remaining_mask = result.isna()
-        if remaining_mask.any():
+        still_remaining = result.isna()
+        if still_remaining.any():
+            dates_remaining = date_series[still_remaining].astype(str).str.strip()
             # Try ISO format first (YYYYMMDD)
-            iso_dates = pd.to_datetime(dates[remaining_mask], format="%Y%m%d", errors="coerce")
-            valid_iso = ~iso_dates.isna()
-            result.loc[remaining_mask & valid_iso] = iso_dates[valid_iso]
+            iso_dates = pd.to_datetime(dates_remaining, format="%Y%m%d", errors="coerce")
+            result[still_remaining] = iso_dates
 
         # Handle yearly format (YYYY)
-        remaining_mask = result.isna()
-        if remaining_mask.any():
+        still_remaining = result.isna()
+        if still_remaining.any():
+            dates_remaining = date_series[still_remaining].astype(str).str.strip()
             yearly = pd.to_datetime(
-                dates[remaining_mask] + "-01-01", format="%Y-%m-%d", errors="coerce"
+                dates_remaining + "-01-01", format="%Y-%m-%d", errors="coerce"
             )
-            result[remaining_mask] = yearly
+            result[still_remaining] = yearly
 
         return result
 

@@ -22,15 +22,15 @@ async def main():
     print("=" * 80)
     print()
 
-    # Use hardcoded IDs from known working series
-    # From operation 30 (IPC) and 31 (IPRI)
-    # These were successful in the index building
-    series_1 = "IPI77218"  # IPRI - should be monthly
-    series_2 = "CNE2003"   # CNE - should be quarterly
+    # Use verified working series IDs from find_working_series.py
+    # These have excellent overlap: 45 points from 2021-2025
+    series_1 = "IAS3643"   # Publishing: Cifra de negocio Edición - Monthly
+    series_2 = "IAS3687"   # Housing: Cifra de negocio inmobiliarias - Monthly
 
-    print(f"Testing with hardcoded series:")
-    print(f"  Series 1: {series_1} (IPRI - monthly)")
-    print(f"  Series 2: {series_2} (CNE - quarterly)")
+    print(f"Testing with verified working series:")
+    print(f"  Series 1: {series_1} (Publishing/Editing - Monthly)")
+    print(f"  Series 2: {series_2} (Real Estate - Monthly)")
+    print(f"  Expected overlap: 45 months (2021-2025)")
     print()
 
     aggregator = DataAggregator()
@@ -48,20 +48,10 @@ async def main():
             df2 = aggregator.parse_ine_data(data2)
 
             if df1.empty or df2.empty:
-                print(f"✗ Empty data:")
+                print(f"✗ Empty data (series may have been removed from API):")
                 print(f"  Series 1: {len(df1)} points")
                 print(f"  Series 2: {len(df2)} points")
-                print("\nTrying fallback series...")
-
-                # Fallback: Use series from different operation codes
-                series_1 = "IPI77218"
-                series_2 = "IPI77219"
-
-                data1 = await client.get_series_data(series_1, last_n=60)
-                data2 = await client.get_series_data(series_2, last_n=60)
-
-                df1 = aggregator.parse_ine_data(data1)
-                df2 = aggregator.parse_ine_data(data2)
+                return
 
             print(f"✓ Data fetched:")
             print(f"  Series 1: {len(df1)} points")
