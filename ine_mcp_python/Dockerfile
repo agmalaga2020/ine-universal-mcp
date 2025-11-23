@@ -2,30 +2,37 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Instalar dependencias del sistema minimas
 RUN apt-get update && apt-get install -y \
-    build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv
+# Instalar uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.cargo/bin:$PATH"
 
-# Copy project files
-COPY pyproject.toml ./
+# Copy configuration files
+COPY pyproject.toml uv.lock ./
+
+# Instalar dependencias (El paso peligroso para la RAM)
+# Usamos --no-cache para intentar reducir el uso de disco/memoria temporal
+RUN uv sync --frozen --no-cache
+
+# Copiar el código
 COPY ine_mcp ./ine_mcp/
 COPY scripts ./scripts/
 
-# Install dependencies
-RUN uv sync --frozen
+# Crear directorio de datos
+RUN mkdir -p /app/data
 
-# Copy pre-built FAISS index (55MB)
-# This includes faiss_index.bin, series_metadata.pkl, and winning_series.json
-COPY data ./data/
+# --- SOLUCIÓN A (Build on deploy con fallback robusto) ---
+# Intentamos construir el índice durante el build.
+# Si falla (por memoria o API), hacemos echo y continuamos (|| true).
+# Esto asegura que el deploy NO falle, permitiendo depurar después.
+RUN uv run python scripts/build_index.py || echo "⚠️ WARNING: Index build failed during deployment. Server will start in degraded mode."
 
-# Expose port for health check (if needed)
+# Exponer puerto
 EXPOSE 8000
 
-# Default command (can be overridden)
+# Ejecutar servidor
 CMD ["uv", "run", "python", "-m", "ine_mcp.server"]
