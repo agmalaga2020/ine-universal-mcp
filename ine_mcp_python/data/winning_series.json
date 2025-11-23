@@ -1,0 +1,142 @@
+{
+  "total_found": 15,
+  "categories_searched": 7,
+  "series": [
+    {
+      "id": "EEEI4154",
+      "name": "Consumo de mercaderías. Energía y agua. Datos en euros",
+      "description": "",
+      "similarity_score": 0.5434812307357788,
+      "category": "Inflation (IPC)",
+      "query": "inflación precios consumo",
+      "frequency": "Y"
+    },
+    {
+      "id": "IAS3643",
+      "name": "Cifra de negocio a precios corrientes. Edición. Total Nacional. Variación de la media en lo que va de año. ",
+      "description": "",
+      "similarity_score": 0.5199333429336548,
+      "category": "Inflation (IPC)",
+      "query": "inflación precios consumo",
+      "frequency": "M"
+    },
+    {
+      "id": "IAS2509",
+      "name": "Cifra de negocio a precios corrientes. Edición. Total Nacional. Variación de la media en lo que va de año. ",
+      "description": "",
+      "similarity_score": 0.5199333429336548,
+      "category": "Inflation (IPC)",
+      "query": "inflación precios consumo",
+      "frequency": "M"
+    },
+    {
+      "id": "EEEI13702",
+      "name": "Nacional. Horas trabajadas por el personal no remunerado. CNAE 35. Suministro de electricidad y gas.",
+      "description": "",
+      "similarity_score": 0.5363084077835083,
+      "category": "Unemployment (EPA)",
+      "query": "paro desempleo EPA",
+      "frequency": "Y"
+    },
+    {
+      "id": "EEEI13703",
+      "name": "Nacional. Horas trabajadas por el personal no remunerado. CNAE 36, 37, 38, 39. Agua y residuos.",
+      "description": "",
+      "similarity_score": 0.5237917304039001,
+      "category": "Unemployment (EPA)",
+      "query": "paro desempleo EPA",
+      "frequency": "Y"
+    },
+    {
+      "id": "EEEI5528",
+      "name": "Horas trabajadas por el personal no remunerado. Madera y corcho. Empresas con 20 o más personas ocupadas. Datos en euros",
+      "description": "",
+      "similarity_score": 0.516438364982605,
+      "category": "Unemployment (EPA)",
+      "query": "paro desempleo EPA",
+      "frequency": "Y"
+    },
+    {
+      "id": "IAS1825",
+      "name": "Cifra de negocio a precios corrientes. Base 2010. Actividades de agencias de viajes, operadores turísticos, servicios de reservas y actividades relacionadas con los mismos. Total Nacional. Ponderación. ",
+      "description": "",
+      "similarity_score": 0.5700094699859619,
+      "category": "Tourism",
+      "query": "turismo pernoctaciones hoteles",
+      "frequency": "Y"
+    },
+    {
+      "id": "IAS4490",
+      "name": "Cifra de negocio a precios corrientes. Actividades de agencias de viajes, operadores turísticos, servicios de reservas y actividades relacionadas con los mismos. Total Nacional. Ponderación. ",
+      "description": "",
+      "similarity_score": 0.5643263459205627,
+      "category": "Tourism",
+      "query": "turismo pernoctaciones hoteles",
+      "frequency": "Y"
+    },
+    {
+      "id": "IAS3312",
+      "name": "Cifra de negocio a precios corrientes. Actividades de agencias de viajes, operadores turísticos, servicios de reservas y actividades relacionadas con los mismos. Total Nacional. Ponderación. ",
+      "description": "",
+      "similarity_score": 0.5643263459205627,
+      "category": "Tourism",
+      "query": "turismo pernoctaciones hoteles",
+      "frequency": "Y"
+    },
+    {
+      "id": "IAS3643",
+      "name": "Cifra de negocio a precios corrientes. Edición. Total Nacional. Variación de la media en lo que va de año. ",
+      "description": "",
+      "similarity_score": 0.6054012775421143,
+      "category": "GDP",
+      "query": "PIB producto interior bruto",
+      "frequency": "M"
+    },
+    {
+      "id": "IAS2509",
+      "name": "Cifra de negocio a precios corrientes. Edición. Total Nacional. Variación de la media en lo que va de año. ",
+      "description": "",
+      "similarity_score": 0.6054012775421143,
+      "category": "GDP",
+      "query": "PIB producto interior bruto",
+      "frequency": "M"
+    },
+    {
+      "id": "IAS3699",
+      "name": "Cifra de negocio a precios corrientes. Transporte y almacenamiento. Total Nacional. Variación de la media en lo que va de año. ",
+      "description": "",
+      "similarity_score": 0.5927152037620544,
+      "category": "GDP",
+      "query": "PIB producto interior bruto",
+      "frequency": "M"
+    },
+    {
+      "id": "IAS3687",
+      "name": "Cifra de negocio a precios corrientes. Actividades inmobiliarias. Total Nacional. Variación de la media en lo que va de año. ",
+      "description": "",
+      "similarity_score": 0.5210452079772949,
+      "category": "Housing",
+      "query": "vivienda precios hipotecas",
+      "frequency": "M"
+    },
+    {
+      "id": "IAS3619",
+      "name": "Cifra de negocio a precios corrientes. Actividades inmobiliarias. Total Nacional. Variación de la media en lo que va de año. ",
+      "description": "",
+      "similarity_score": 0.5210452079772949,
+      "category": "Housing",
+      "query": "vivienda precios hipotecas",
+      "frequency": "M"
+    },
+    {
+      "id": "IAS4050",
+      "name": "Cifra de negocio a precios corrientes. Actividades inmobiliarias. Total Nacional. Coeficiente de variación. ",
+      "description": "",
+      "similarity_score": 0.49746787548065186,
+      "category": "Housing",
+      "query": "vivienda precios hipotecas",
+      "frequency": "M"
+    }
+  ],
+  "note": "These series have been verified to return actual data from INE API"
+}

@@ -24,10 +24,12 @@ wheels/
 *.egg
 
 # Data files (FAISS index is large)
-data/
-*.pkl
-*.bin
-*.faiss
+# NOTE: data/ is NOT ignored for deployment - we commit the pre-built index
+# For production with Git LFS, use: git lfs track "*.bin" "*.pkl"
+# data/
+# *.pkl
+# *.bin
+# *.faiss
 
 # Environment
 .env

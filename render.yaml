@@ -1,13 +1,17 @@
 services:
   - type: web
     name: ine-universal-mcp
-    runtime: node
+    runtime: docker
+    rootDir: ine_mcp_python
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
     envVars:
       - key: PORT
-        value: 10000
-      - key: NODE_ENV
-        value: production
-    healthCheckPath: /
+        value: 8000
+      - key: INDEX_DIR
+        value: /app/data
+      - key: LOG_LEVEL
+        value: info
+      # Redis is optional - will use in-memory fallback if not configured
+      # - key: REDIS_URL
+      #   value: redis://localhost:6379
+    healthCheckPath: /health

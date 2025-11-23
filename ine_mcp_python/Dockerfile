@@ -20,8 +20,9 @@ COPY scripts ./scripts/
 # Install dependencies
 RUN uv sync --frozen
 
-# Create data directory for FAISS index
-RUN mkdir -p /app/data
+# Copy pre-built FAISS index (55MB)
+# This includes faiss_index.bin, series_metadata.pkl, and winning_series.json
+COPY data ./data/
 
 # Expose port for health check (if needed)
 EXPOSE 8000
