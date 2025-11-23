@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ine-universal-mcp
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /
