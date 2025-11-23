@@ -1,0 +1,38 @@
+[project]
+name = "ine-mcp"
+version = "2.0.0"
+description = "Production-grade MCP server for Spanish INE API with semantic search and intelligent data aggregation"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "httpx>=0.25.0",
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+    "sentence-transformers>=2.2.2",
+    "faiss-cpu>=1.7.4",
+    "redis>=5.0.0",
+    "pydantic>=2.5.0",
+    "python-dotenv>=1.0.0",
+    "mcp>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.10.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
