@@ -269,6 +269,64 @@ uv run python scripts/build_index.py
 
 ## Deployment
 
+### ⚠️ CRITICAL: FAISS Index Persistence Strategy
+
+**The Problem:**
+The FAISS index (`data/faiss_index.bin` + `data/series_metadata.pkl`) is ~500MB and takes 20+ minutes to build. Most free-tier platforms (Render, Railway) **do NOT have persistent storage**. Every server restart = index lost = semantic search disabled.
+
+**Solutions (Pick One):**
+
+#### Option 1: Commit Pre-built Index (Recommended for Free Tier)
+
+```bash
+# Build index locally
+uv run python scripts/build_index.py
+
+# Install Git LFS (for files >100MB)
+git lfs install
+git lfs track "data/*.bin"
+git lfs track "data/*.pkl"
+
+# Commit index
+git add data/ .gitattributes
+git commit -m "Add pre-built FAISS index"
+git push
+```
+
+**Pros:** Works on all platforms, zero rebuild time
+**Cons:** ~500MB in repo, requires Git LFS
+
+#### Option 2: Upload to S3/Cloud Storage
+
+```python
+# In server startup: download index from S3
+import boto3
+s3 = boto3.client('s3')
+s3.download_file('my-bucket', 'faiss_index.bin', 'data/faiss_index.bin')
+```
+
+**Pros:** Clean repo
+**Cons:** Needs S3 credentials, download time on cold start (~30s)
+
+#### Option 3: Render Persistent Disk (Paid Tier Only)
+
+```yaml
+# render.yaml
+services:
+  - type: web
+    disk:
+      name: faiss-index
+      mountPath: /app/data
+      sizeGB: 1
+```
+
+**Pros:** Fast, proper solution
+**Cons:** $7/month minimum
+
+#### Option 4: Rebuild on First Request (Demo Only)
+
+Server automatically builds index on first search if missing. **Not recommended** for production (20min downtime).
+
 ### Docker
 
 ```bash
@@ -276,13 +334,15 @@ docker build -t ine-mcp:latest .
 docker run -e REDIS_URL=redis://host:6379 ine-mcp:latest
 ```
 
-### Render/Fly.io/Railway
+### Render/Fly.io/Railway (Free Tier)
 
-Set environment variables:
-- `REDIS_URL`: Redis connection string (or omit for in-memory)
-- `INDEX_DIR`: Path to data directory (default: `/app/data`)
+1. Build index locally: `uv run python scripts/build_index.py`
+2. Use Option 1 (Git LFS) or Option 2 (S3)
+3. Set environment variables:
+   - `REDIS_URL`: Redis connection string (optional)
+   - `INDEX_DIR`: `/app/data`
 
-**Note:** You'll need to upload pre-built FAISS index to persistent storage or rebuild on first run.
+**Expected behavior without index:** Server runs, semantic search falls back to keyword search (degraded but functional).
 
 ## Troubleshooting
 

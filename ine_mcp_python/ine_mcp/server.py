@@ -267,7 +267,13 @@ class INEMCPServer:
         )
 
     async def _analyze_correlation(self, args: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze correlation between two series"""
+        """
+        Analyze correlation between two series with SMART FREQUENCY ALIGNMENT
+
+        SENIOR FIX: Detects frequencies and resamples to common frequency
+        Before: Monthly + Quarterly → loses 66% of data
+        After: Both resampled to Quarterly → robust statistics
+        """
         import pandas as pd
         import numpy as np
 
@@ -292,21 +298,44 @@ class INEMCPServer:
         if df1.empty or df2.empty:
             return {"error": "One or both series have no data"}
 
-        # Align dates (inner join)
+        # CRITICAL FIX: Align frequencies before merging
+        freq1_before = self.aggregator.detect_frequency(df1)
+        freq2_before = self.aggregator.detect_frequency(df2)
+
+        df1_aligned, df2_aligned, common_freq = self.aggregator.align_series_frequencies(
+            df1, df2
+        )
+
+        # Now merge on aligned frequencies (no data loss!)
         combined = pd.merge(
-            df1, df2, left_index=True, right_index=True, suffixes=("_1", "_2")
+            df1_aligned, df2_aligned, left_index=True, right_index=True, suffixes=("_1", "_2")
         )
 
         if len(combined) < 2:
-            return {"error": "Not enough overlapping data points"}
+            return {
+                "error": "Not enough overlapping data points after alignment",
+                "freq_series_1": freq1_before,
+                "freq_series_2": freq2_before,
+                "common_freq": common_freq,
+            }
 
-        # Calculate correlation
+        # Calculate correlation on properly aligned data
         correlation = combined["value_1"].corr(combined["value_2"])
 
         return {
             "series_1": series_id_1,
             "series_2": series_id_2,
-            "overlapping_points": len(combined),
+            "frequency_alignment": {
+                "series_1_original": freq1_before,
+                "series_2_original": freq2_before,
+                "common_frequency": common_freq,
+                "resampling_applied": freq1_before != freq2_before,
+            },
+            "data_points": {
+                "series_1_original": len(df1),
+                "series_2_original": len(df2),
+                "after_alignment": len(combined),
+            },
             "date_range": {
                 "start": combined.index[0].strftime("%Y-%m-%d"),
                 "end": combined.index[-1].strftime("%Y-%m-%d"),
