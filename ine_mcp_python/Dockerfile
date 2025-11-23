@@ -11,14 +11,14 @@ RUN apt-get update && apt-get install -y \
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.cargo/bin:$PATH"
 
-# Copy configuration files
-COPY pyproject.toml uv.lock ./
+# Copiar SOLO los archivos de configuración primero (aprovecha cache de Docker)
+COPY pyproject.toml ./
 
 # Instalar dependencias (El paso peligroso para la RAM)
-# Usamos --no-cache para intentar reducir el uso de disco/memoria temporal
-RUN uv sync --frozen --no-cache
+# Usamos uv pip install en lugar de uv sync (más apropiado para Docker)
+RUN uv pip install --system --no-cache -e .
 
-# Copiar el código
+# Ahora copiar el código fuente
 COPY ine_mcp ./ine_mcp/
 COPY scripts ./scripts/
 
@@ -35,4 +35,4 @@ RUN uv run python scripts/build_index.py || echo "⚠️ WARNING: Index build fa
 EXPOSE 8000
 
 # Ejecutar servidor
-CMD ["uv", "run", "python", "-m", "ine_mcp.server"]
+CMD ["python", "-m", "ine_mcp.server"]
