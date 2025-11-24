@@ -16,16 +16,16 @@ ENV HOME=/home/user \
 
 WORKDIR $HOME/app
 
-# Copy dependency files (leverage Docker cache)
+# Copy application code and dependencies
+# (Must copy code BEFORE install for package to be found)
 COPY --chown=user pyproject.toml uv.lock* ./
-
-# Install uv and dependencies
-RUN pip install --no-cache-dir uv && \
-    uv pip install --system --no-cache -e .
-
-# Copy application code
 COPY --chown=user ine_mcp ./ine_mcp
 COPY --chown=user scripts ./scripts
+
+# Install uv and dependencies
+# Use regular install (not -e editable) for production Docker
+RUN pip install --no-cache-dir uv && \
+    uv pip install --system --no-cache .
 
 # Create data directory with write permissions
 RUN mkdir -p data
