@@ -97,18 +97,19 @@ class SemanticSearchEngine:
         # Generate embeddings using FastEmbed
         logger.info("Generating embeddings...")
         # FastEmbed returns a generator, convert to numpy array
+        # CRITICAL: Must be float32 for FAISS compatibility
         embeddings_list = list(self.model.embed(texts, batch_size=32))
-        embeddings = np.array(embeddings_list)
+        embeddings = np.array(embeddings_list, dtype=np.float32)
 
         # Create FAISS index
         dimension = embeddings.shape[1]
         index = faiss.IndexFlatIP(dimension)  # Inner Product for cosine similarity
 
-        # Normalize embeddings for cosine similarity
+        # Normalize embeddings for cosine similarity (requires float32)
         faiss.normalize_L2(embeddings)
 
-        # Add to index
-        index.add(embeddings.astype(np.float32))
+        # Add to index (already float32, no conversion needed)
+        index.add(embeddings)
 
         self._index = index
         self._metadata = metadata
