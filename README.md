@@ -1,311 +1,92 @@
+---
+title: INE Universal MCP Server
+emoji: 📊
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+---
+
 # INE Universal MCP Server
 
 **[🇪🇸 Versión en Español](./README.es.md)** | 🇬🇧 English
 
-A robust Model Context Protocol (MCP) server providing universal access to the Spanish INE (Instituto Nacional de Estadística) API for accessing economic, demographic, and statistical data from Spain.
+A production-grade Model Context Protocol (MCP) server providing universal access to the Spanish INE (Instituto Nacional de Estadística) API with advanced semantic search and intelligent data aggregation.
 
-## Features
+## 🚀 Features
 
-- 🔍 **Search Series**: Search for statistical series by keywords
-- 📊 **Get Data**: Retrieve time series data with flexible filtering
-- 📋 **Metadata**: Access complete series metadata (units, frequency, source)
-- 🏢 **Operations**: List and explore major INE operations (IPC, EPA, PIB, etc.)
-- 📑 **Tables**: Download complete data tables
-- 🔎 **Variables**: Search system variables
-- 🛡️ **Production-Ready**: Robust error handling, logging, and timeout management
-- 🚀 **Deploy-Ready**: Configured for Render Free Tier deployment
+- 🔍 **Semantic Search**: FAISS-powered vector search with 34K+ indexed series
+- 📊 **Smart Data Retrieval**: Automatic frequency detection and aggregation
+- 🔗 **Correlation Analysis**: Automatic frequency alignment for time series correlation
+- ⚡ **High Performance**: Redis caching with async background index building
+- 🐳 **Cloud-Ready**: Deployed on Hugging Face Spaces with Docker
+- 🛡️ **Production-Grade**: Robust error handling, logging, and timeout management
 
-## Quick Start
+## 📡 API Endpoints
 
-### Local Installation
+- **SSE Endpoint**: `/sse` - Server-Sent Events for MCP client connections
+- **Messages**: `/messages` - POST endpoint for MCP protocol messages
+- **Health Check**: `/health` - Service health and component status
+- **Root**: `/` - Server info and search index statistics
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/ine-universal-mcp.git
-cd ine-universal-mcp
+## 🔧 MCP Tools Available
 
-# Install dependencies
-npm install
+1. **search_series_semantic**: Semantic search across INE series
+2. **get_series_data**: Fetch time series with intelligent aggregation
+3. **analyze_correlation**: Correlation analysis with frequency alignment
+4. **get_operations**: List available INE operations
 
-# Start the server
-npm start
-```
+## 🏗️ Architecture
 
-The health check endpoint will be available at `http://localhost:10000`
+- **FastAPI + SSE**: Web server with Server-Sent Events for MCP
+- **FAISS**: Vector similarity search for semantic queries
+- **FastEmbed**: Lightweight ONNX embeddings (150MB vs 1.5GB)
+- **Pandas**: Vectorized operations for time series processing
+- **Redis**: Caching layer with in-memory fallback
+- **Docker**: Multi-stage build optimized for HF Spaces
 
-### Deploy to Render
+## 📚 Examples
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+Check the `ine_mcp_python/examples/` folder for complete usage examples:
 
-Or manually:
+- `simple_search.py` - Basic semantic search
+- `ipc_analysis.py` - Consumer Price Index analysis
+- `tourism_rental_correlation.py` - Tourism and rental price correlation
+- `final_malaga_analysis.py` - Provincial demographic analysis
 
-1. Fork this repository
-2. Create a new Web Service on [Render](https://render.com)
-3. Connect your repository
-4. Render will automatically detect the `render.yaml` configuration
-5. Deploy!
+## 🔗 Connect with Claude
 
-## Configuration
-
-Create a `.env` file based on `.env.example`:
-
-```bash
-PORT=10000  # Port for health check endpoint
-```
-
-## Available Tools
-
-### 1. `search_ine_series`
-Search for statistical series by keywords.
-
-**Parameters:**
-- `query` (string, required): Search keywords (e.g., "IPC", "EPA", "PIB")
-- `limit` (number, optional): Maximum results to return (default: 20)
-
-**Example:**
-```json
-{
-  "query": "IPC",
-  "limit": 10
-}
-```
-
-### 2. `get_series_data`
-Retrieve data points from a specific series.
-
-**Parameters:**
-- `seriesId` (string, required): INE series ID (e.g., "IPC251856")
-- `lastN` (number, optional): Get last N data points
-- `startDate` (string, optional): Start date (YYYYMMDD or YYYY)
-- `endDate` (string, optional): End date (YYYYMMDD or YYYY)
-- `dataType` (string, optional): Output format ("flat" or "csv")
-
-**Example:**
-```json
-{
-  "seriesId": "IPC251856",
-  "lastN": 12
-}
-```
-
-### 3. `get_series_metadata`
-Get complete metadata for a series (units, frequency, source, etc.)
-
-**Parameters:**
-- `seriesId` (string, required): INE series ID
-
-### 4. `list_operations`
-List main INE operations (IPC, EPA, PIB, etc.)
-
-**Parameters:** None
-
-### 5. `get_series_by_operation`
-List all series belonging to a specific operation.
-
-**Parameters:**
-- `operation` (string, required): Operation code (e.g., "30" for IPC, "45" for EPA)
-- `limit` (number, optional): Maximum series to return (default: 100)
-
-### 6. `get_table_data`
-Download complete data from an INE table.
-
-**Parameters:**
-- `tableId` (string, required): INE table ID
-
-### 7. `search_variables`
-Search for variables in the INE system.
-
-**Parameters:**
-- `query` (string, required): Search term for variables
-
-## Testing Examples
-
-### Example 1: Search for IPC (Consumer Price Index) Series
-
-**Request:**
-```json
-{
-  "tool": "search_ine_series",
-  "arguments": {
-    "query": "IPC",
-    "limit": 5
-  }
-}
-```
-
-**Expected Result:**
-```json
-{
-  "query": "IPC",
-  "totalResults": 150,
-  "returnedResults": 5,
-  "series": [
-    {
-      "id": "IPC251856",
-      "title": "Índice de Precios de Consumo. General",
-      "description": "Base 2021"
-    }
-    // ... more results
-  ]
-}
-```
-
-### Example 2: Get Last 12 Data Points from IPC Series
-
-**Request:**
-```json
-{
-  "tool": "get_series_data",
-  "arguments": {
-    "seriesId": "IPC251856",
-    "lastN": 12
-  }
-}
-```
-
-**Expected Result:**
-```json
-{
-  "seriesId": "IPC251856",
-  "name": "Índice de Precios de Consumo. General",
-  "unit": "Índice",
-  "totalDataPoints": 12,
-  "data": [
-    { "date": "2024M01", "value": 113.5, "period": "2024M01" },
-    { "date": "2024M02", "value": 114.2, "period": "2024M02" }
-    // ... more data points
-  ]
-}
-```
-
-### Example 3: List Series from EPA (Labour Force Survey) Operation
-
-**Request:**
-```json
-{
-  "tool": "get_series_by_operation",
-  "arguments": {
-    "operation": "45",
-    "limit": 10
-  }
-}
-```
-
-**Expected Result:**
-```json
-{
-  "operation": "45",
-  "totalSeries": 250,
-  "returnedSeries": 10,
-  "series": [
-    {
-      "id": "EPA123456",
-      "title": "Población activa. Total",
-      "description": "Encuesta de Población Activa"
-    }
-    // ... more series
-  ]
-}
-```
-
-## Connecting to AI Tools
-
-### Claude Desktop
-
-Add to your `claude_desktop_config.json`:
+Add this configuration to your Claude Desktop config:
 
 ```json
 {
   "mcpServers": {
-    "ine": {
-      "command": "node",
-      "args": ["/path/to/ine-universal-mcp/server.js"]
+    "ine-universal": {
+      "url": "https://Blbllbbdkdjbdjf-ine-universal-mcp.hf.space/sse"
     }
   }
 }
 ```
 
-### Cursor / Windsurf
+## 📊 Data Source
 
-Add to your MCP settings:
+Data provided by [INE (Instituto Nacional de Estadística)](https://www.ine.es) - Spain's official statistical agency.
 
-```json
-{
-  "mcpServers": {
-    "ine": {
-      "command": "node",
-      "args": ["/absolute/path/to/server.js"],
-      "cwd": "/absolute/path/to/ine-universal-mcp"
-    }
-  }
-}
-```
+## 🛠️ Development
 
-## Architecture
+Built with:
+- Python 3.11
+- FastAPI + Uvicorn
+- FAISS (CPU)
+- FastEmbed
+- Pandas + NumPy
+- Redis (optional)
+- MCP SDK 0.9.0
 
-### Error Handling
+## 📝 License
 
-The server implements comprehensive error handling:
-
-- **Timeout errors** (>30s): Suggests reducing data range
-- **404 errors**: Clear message about invalid series/table IDs
-- **500 errors**: Indicates INE server issues
-- **Empty data**: Explicit message when no data is available
-
-### Logging
-
-All API calls are logged with:
-- Timestamp
-- HTTP method and URL
-- Request parameters
-- Response time
-- Status codes
-- Error details
-
-Logs are written to `stderr` for compatibility with Render's logging system.
-
-### Data Transformation
-
-Raw INE API responses are transformed into clean, LLM-friendly formats:
-- **Search results**: Only ID, title, and description
-- **Series data**: Flat date-value pairs or CSV format
-- **Metadata**: Structured key information
-- **Automatic pagination**: Handles large result sets
-
-## API Reference
-
-The server uses the official INE Tempus API:
-- **Base URL**: https://servicios.ine.es/wstempus/js/ES
-- **Documentation**: https://www.ine.es/dyngs/DAB/index.htm
-
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Run in development mode (with auto-restart)
-npm run dev
-
-# Run in production mode
-npm start
-```
-
-## License
-
-MIT
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Support
-
-For issues related to:
-- **This MCP server**: Open an issue in this repository
-- **INE API**: Consult the [official documentation](https://www.ine.es/dyngs/DAB/index.htm)
-- **MCP Protocol**: See [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/sdk)
+MIT License - See LICENSE file for details
 
 ---
 
-Made with ❤️ for the data science and AI community
+**Status**: 🟢 Running on Hugging Face Spaces | **Index**: 34,390 series | **Version**: 2.0.0
