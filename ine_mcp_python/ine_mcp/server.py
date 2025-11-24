@@ -5,6 +5,7 @@ Exposes SSE (Server-Sent Events) endpoints for remote LLM connection.
 Architecture optimized for cloud deployment (Hugging Face Spaces, Railway, etc.)
 """
 
+import asyncio
 import json
 import logging
 import os
@@ -34,6 +35,85 @@ logger = logging.getLogger(__name__)
 # Global MCP server and components
 mcp_server = Server("ine-mcp")
 ine_components = {}
+
+# Curated list of main INE operations (same as build_index.py)
+MAIN_OPERATIONS = [
+    {"code": "30", "name": "IPC - Índice de Precios de Consumo"},
+    {"code": "45", "name": "EPA - Encuesta de Población Activa"},
+    {"code": "31", "name": "IPRI - Índice de Precios Industriales"},
+    {"code": "36", "name": "CNE - Contabilidad Nacional"},
+    {"code": "56", "name": "Demografía y Población"},
+    {"code": "23", "name": "Comercio Exterior"},
+    {"code": "50", "name": "Encuesta de Condiciones de Vida"},
+    {"code": "24", "name": "Turismo"},
+    {"code": "1270", "name": "Hipotecas"},
+    {"code": "1259", "name": "Índice de Precios de Vivienda"},
+]
+
+
+async def build_index_background():
+    """
+    Background task to build FAISS index from INE API.
+    Runs asynchronously during startup - doesn't block server from accepting requests.
+
+    If this fails, the server continues running in degraded mode (keyword search fallback).
+    """
+    logger.info("=" * 80)
+    logger.info("🚀 BACKGROUND: Starting FAISS index build from INE API")
+    logger.info("=" * 80)
+    logger.info("This will take 10-15 minutes. Server is ready to accept requests meanwhile.")
+    logger.info("")
+
+    try:
+        all_series = []
+
+        async with INEClient(timeout=60.0) as client:
+            logger.info(f"Fetching series from {len(MAIN_OPERATIONS)} main operations...")
+
+            for i, operation in enumerate(MAIN_OPERATIONS, 1):
+                op_code = operation["code"]
+                op_name = operation["name"]
+
+                logger.info(f"[{i}/{len(MAIN_OPERATIONS)}] {op_name} (code: {op_code})")
+
+                try:
+                    series = await client.get_operation_series(op_code)
+                    all_series.extend(series)
+                    logger.info(f"  → {len(series)} series found")
+
+                except Exception as e:
+                    logger.error(f"  → Error: {e}")
+                    continue
+
+            logger.info("")
+            logger.info(f"Total series collected: {len(all_series)}")
+
+            if len(all_series) == 0:
+                logger.error("❌ No series found. Index build failed.")
+                logger.warning("Server will continue in degraded mode (keyword search only)")
+                return
+
+            # Build index
+            search_engine = ine_components.get("search")
+            if search_engine:
+                logger.info("Building FAISS index (this takes ~10-15 minutes)...")
+                num_indexed, size_mb = search_engine.create_index(all_series)
+                search_engine.save_index()
+
+                logger.info("")
+                logger.info("=" * 80)
+                logger.info("✅ BACKGROUND: Index build COMPLETE!")
+                logger.info("=" * 80)
+                logger.info(f"  Total series indexed: {num_indexed}")
+                logger.info(f"  Index size: {size_mb:.2f}MB")
+                logger.info("  Semantic search is now ACTIVE!")
+                logger.info("")
+            else:
+                logger.error("Search engine component not initialized")
+
+    except Exception as e:
+        logger.error(f"❌ BACKGROUND: Index build failed: {e}", exc_info=True)
+        logger.warning("Server will continue in degraded mode (keyword search only)")
 
 
 @asynccontextmanager
@@ -67,10 +147,17 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"⚠️  Search index not available: {e}")
         logger.warning("Server will use keyword search fallback")
+        logger.info("🚀 Launching background task to build index from INE API...")
+        # Launch background task - doesn't block startup!
+        asyncio.create_task(build_index_background())
 
     logger.info("=" * 80)
     logger.info("INE MCP Server - Ready to accept connections")
     logger.info("=" * 80)
+    logger.info("")
+    logger.info("Health endpoint: http://0.0.0.0:7860/health")
+    logger.info("SSE endpoint: http://0.0.0.0:7860/sse")
+    logger.info("")
 
     yield
 
