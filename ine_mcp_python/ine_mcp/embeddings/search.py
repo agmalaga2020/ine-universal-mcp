@@ -1,6 +1,6 @@
 """
 Semantic Search Engine - Vector-based search for INE series
-Uses sentence-transformers for embeddings and FAISS for fast similarity search
+Uses fastembed (lightweight, no PyTorch!) for embeddings and FAISS for fast similarity search
 """
 
 import json
@@ -11,7 +11,7 @@ from typing import List, Dict, Any, Optional, Tuple
 
 import numpy as np
 import faiss
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 
 logger = logging.getLogger(__name__)
 
@@ -49,18 +49,18 @@ class SemanticSearchEngine:
         self.metadata_path = metadata_path or Path("data/series_metadata.pkl")
 
         # Lazy loading
-        self._model: Optional[SentenceTransformer] = None
+        self._model: Optional[TextEmbedding] = None
         self._index: Optional[faiss.Index] = None
         self._metadata: List[Dict[str, Any]] = []
 
         logger.info(f"Semantic search engine initialized with model: {model_name}")
 
     @property
-    def model(self) -> SentenceTransformer:
-        """Lazy load the embedding model"""
+    def model(self) -> TextEmbedding:
+        """Lazy load the embedding model (FastEmbed - lightweight, no PyTorch!)"""
         if self._model is None:
             logger.info(f"Loading embedding model: {self.model_name}")
-            self._model = SentenceTransformer(self.model_name)
+            self._model = TextEmbedding(model_name=self.model_name)
             logger.info("Model loaded successfully")
         return self._model
 
@@ -93,14 +93,11 @@ class SemanticSearchEngine:
                 "description": desc,
             })
 
-        # Generate embeddings
+        # Generate embeddings using FastEmbed
         logger.info("Generating embeddings...")
-        embeddings = self.model.encode(
-            texts,
-            show_progress_bar=True,
-            batch_size=32,
-            convert_to_numpy=True,
-        )
+        # FastEmbed returns a generator, convert to numpy array
+        embeddings_list = list(self.model.embed(texts, batch_size=32))
+        embeddings = np.array(embeddings_list)
 
         # Create FAISS index
         dimension = embeddings.shape[1]
@@ -176,11 +173,9 @@ class SemanticSearchEngine:
         if self._index is None:
             raise RuntimeError("Index not loaded. Call load_index() first.")
 
-        # Encode query
-        query_embedding = self.model.encode(
-            [query],
-            convert_to_numpy=True,
-        )
+        # Encode query using FastEmbed
+        query_embeddings = list(self.model.embed([query]))
+        query_embedding = np.array([query_embeddings[0]])  # Shape: (1, dim)
 
         # Normalize for cosine similarity
         faiss.normalize_L2(query_embedding)
