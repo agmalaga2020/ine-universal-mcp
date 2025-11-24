@@ -104,7 +104,7 @@ class DataAggregator:
         # INE API returns dates like 1706742000000 for some series
         numeric_mask = pd.to_numeric(date_series, errors='coerce').notna()
         if numeric_mask.any():
-            timestamps = pd.to_numeric(date_series[numeric_mask], errors='coerce')
+            timestamps = pd.to_numeric(date_series[numeric_mask], errors='coerce').astype(np.int64)
             # Convert milliseconds to datetime
             result[numeric_mask] = pd.to_datetime(timestamps, unit='ms', errors='coerce')
 

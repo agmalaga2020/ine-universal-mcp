@@ -1,0 +1,75 @@
+================================================================================
+INVESTIGACIÓN FORENSE: Operaciones del INE
+================================================================================
+
+PASO 1: Lista de operaciones disponibles
+--------------------------------------------------------------------------------
+
+Total operaciones: 203
+
+📊 Operaciones de TURISMO encontradas: 18
+  1. [] Estadística de Transporte de Viajeros
+  2. [30162] Encuesta de Ocupación en Alojamientos Turísticos
+  3. [30229] Índice de Precios de Alojamientos de Turismo Rural
+  4. [30179] Índice de Precios Hoteleros
+  5. [30230] Indicadores de Rentabilidad del Sector Hotelero
+  6. [30235] Encuesta de Ocupación Hotelera
+  7. [30236] Encuesta de Ocupación en Apartamentos Turísticos
+  8. [30237] Encuesta de Ocupación en Campings
+  9. [30238] Encuesta de Ocupación en Alojamientos de Turismo Rural
+  10. [30220] Índice de ingresos hoteleros
+  11. [30163] Estadística de Transporte de Viajeros
+  12. [30239] Encuesta de Ocupación en Albergues
+  13. [16023] Encuesta de turismo de residentes
+  14. [] Estadística del Instituto de Turismo de España
+  15. [] Ocupación en alojamientos turísticos
+  16. [] Medición del turismo receptor a partir de la posición de los teléfonos móviles
+  17. [] Medición del turismo emisor a partir de la posición de los teléfonos móviles
+  18. [] Medición del turismo interno interprovincial a partir de la posición de los teléfonos móviles
+
+🏠 Operaciones de VIVIENDA encontradas: 17
+  1. [30243] Censos de Población y Viviendas
+  2. [30182] Índices de Precios del Sector Servicios
+  3. [30457] Índice de Precios de la Vivienda (IPV)
+  4. [30180] Índice de Precios de Consumo Armonizado (IPCA)
+  5. [30138] Índice de Precios de Consumo (IPC)
+  6. [30051] Índices de Precios Industriales
+  7. [30071] Índices de Precios de Exportación y de Importación de Productos Industriales
+  8. [30222] Índice de Precios de Apartamentos Turísticos
+  9. [30223] Índice de Precios de Camping
+  10. [30229] Índice de Precios de Alojamientos de Turismo Rural
+  11. [30062] Índices de Precios de Materiales y Energía e Índices Nacionales de la Mano de Obra
+  12. [30179] Índice de Precios Hoteleros
+  13. [30185] Índice de Precios del Trabajo
+  14. [] Índice de Precios de Consumo IC
+  15. [] Viviendas turísticas en España
+  16. [] Índice de Precios de Vivienda en Alquiler
+  17. [] Índice de Referencia de Arrendamientos de Vivienda
+
+================================================================================
+PASO 2: Exploración de Series por Operación
+================================================================================
+
+🔍 Explorando operación: Estadística de Transporte de Viajeros
+   Código: 
+[2025-11-24T17:55:00.279914] Unexpected error: Expecting value: line 1 column 1 (char 0)
+   ✗ Error: Unexpected error: Expecting value: line 1 column 1 (char 0)
+
+🔍 Explorando operación: Censos de Población y Viviendas
+   Código: 30243
+[2025-11-24T17:55:00.540820] Unexpected error: Expecting value: line 1 column 1 (char 0)
+   ✗ Error: Unexpected error: Expecting value: line 1 column 1 (char 0)
+
+================================================================================
+CONCLUSIÓN
+================================================================================
+
+✓ Se encontraron 18 operaciones de turismo
+
+✓ Se encontraron 17 operaciones de vivienda
+
+Siguientes pasos:
+  1. Usar los códigos de operación encontrados
+  2. Extraer IDs específicos de series de Málaga/Andalucía
+  3. Realizar análisis de correlación con series correctas
+

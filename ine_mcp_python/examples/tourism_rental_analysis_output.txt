@@ -1,0 +1,80 @@
+[0;93m2025-11-24 17:00:14.972620649 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+================================================================================
+ANÁLISIS: Impacto del Turismo en los Precios de Alquiler en Málaga
+================================================================================
+
+✓ Índice cargado: 34390 series
+
+PASO 1: Búsqueda de series - Turismo en Málaga
+--------------------------------------------------------------------------------
+/app/ine_mcp/embeddings/search.py:64: UserWarning: The model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 now uses mean pooling instead of CLS embedding. In order to preserve the previous behaviour, consider either pinning fastembed version to 0.5.1 or using `add_custom_model` functionality.
+  self._model = TextEmbedding(model_name=self.model_name)
+1. Población de Derecho: Málaga. Mujeres
+   ID: DPOD13455
+   Score: 0.700
+
+2. Población de Derecho: Málaga. Ambos Sexos
+   ID: DPOD13453
+   Score: 0.698
+
+3. Población de Derecho: Málaga del Fresno. Mujeres
+   ID: DPOD8982
+   Score: 0.679
+
+4. Población de Derecho: Málaga del Fresno. Ambos Sexos
+   ID: DPOD8980
+   Score: 0.679
+
+5. Población de Derecho: Málaga. Hombres
+   ID: DPOD13454
+   Score: 0.676
+
+
+PASO 2: Búsqueda de series - Precios de Alquiler
+--------------------------------------------------------------------------------
+1. Población de Derecho: Málaga. Ambos Sexos
+   ID: DPOD13453
+   Score: 0.561
+
+2. Población de Derecho: Málaga. Hombres
+   ID: DPOD13454
+   Score: 0.551
+
+3. Población de Derecho: Málaga. Mujeres
+   ID: DPOD13455
+   Score: 0.547
+
+4. Población de Derecho: Málaga del Fresno. Ambos Sexos
+   ID: DPOD8980
+   Score: 0.547
+
+5. Población de Derecho: Málaga del Fresno. Hombres
+   ID: DPOD8981
+   Score: 0.531
+
+
+PASO 3: Obtención de datos
+--------------------------------------------------------------------------------
+Obteniendo datos de turismo: DPOD13455...
+  ✓ 10 datos obtenidos
+    Rango: 1985-12-31 a 1994-12-31
+
+Obteniendo datos de alquileres: DPOD13453...
+  ✓ 10 datos obtenidos
+    Rango: 1985-12-31 a 1994-12-31
+
+PASO 4: Análisis de Correlación
+--------------------------------------------------------------------------------
+Frecuencia común: Y
+Datos alineados: 10 y 10 puntos
+
+RESULTADOS:
+  • Puntos de datos superpuestos: 10
+  • Coeficiente de correlación: 0.995
+  • Interpretación: FUERTE CORRELACIÓN POSITIVA
+
+Esto significa que: cuando el turismo aumenta, los precios de alquiler tienden a aumentar también.
+
+================================================================================
+FIN DEL ANÁLISIS
+================================================================================

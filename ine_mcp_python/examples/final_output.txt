@@ -1,0 +1,19 @@
+================================================================================
+ANÁLISIS FINAL: Turismo vs Vivienda (Málaga/Andalucía)
+================================================================================
+
+PASO 1: Explorando Encuesta de Ocupación Hotelera (EOH)
+--------------------------------------------------------------------------------
+[2025-11-24T17:56:58.716454] Unexpected error: Expecting value: line 1 column 1 (char 0)
+✗ Error en EOH: Unexpected error: Expecting value: line 1 column 1 (char 0)
+
+PASO 2: Explorando Índice de Precios de la Vivienda (IPV)
+--------------------------------------------------------------------------------
+[2025-11-24T17:56:59.289974] Unexpected error: Expecting value: line 1 column 1 (char 0)
+✗ Error en IPV: Unexpected error: Expecting value: line 1 column 1 (char 0)
+
+================================================================================
+PASO 3: Análisis de Correlación
+================================================================================
+
+✗ No hay datos de turismo disponibles

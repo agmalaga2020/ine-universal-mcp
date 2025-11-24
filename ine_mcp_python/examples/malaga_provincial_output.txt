@@ -1,0 +1,77 @@
+[0;93m2025-11-24 17:53:50.601137371 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+================================================================================
+ANÁLISIS PROVINCIAL: Turismo vs Vivienda en MÁLAGA
+================================================================================
+
+✓ Índice cargado: 34,390 series
+
+================================================================================
+PASO 1: Búsqueda Estratégica - Turismo en Málaga
+================================================================================
+
+🔍 Buscando: 'pernoctaciones Málaga turistas'
+/app/ine_mcp/embeddings/search.py:64: UserWarning: The model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 now uses mean pooling instead of CLS embedding. In order to preserve the previous behaviour, consider either pinning fastembed version to 0.5.1 or using `add_custom_model` functionality.
+  self._model = TextEmbedding(model_name=self.model_name)
+
+Encontradas 6 series con 'Málaga':
+  1. Población de Derecho: Málaga. Mujeres
+     ID: DPOD13455 | Score: 0.676
+  2. Población de Derecho: Málaga del Fresno. Mujeres
+     ID: DPOD8982 | Score: 0.663
+  3. Población de Derecho: Málaga. Ambos Sexos
+     ID: DPOD13453 | Score: 0.659
+  4. Población de Derecho: Málaga del Fresno. Ambos Sexos
+     ID: DPOD8980 | Score: 0.650
+  5. Población de Derecho: Málaga. Hombres
+     ID: DPOD13454 | Score: 0.628
+  6. Población de Derecho: Málaga del Fresno. Hombres
+     ID: DPOD8981 | Score: 0.620
+
+================================================================================
+PASO 2: Búsqueda Estratégica - Precios Vivienda Málaga
+================================================================================
+
+🔍 Buscando: 'IPC vivienda alquiler Málaga'
+
+Encontradas 4 series de vivienda (Málaga/Andalucía):
+  1. Cifra de negocio a precios corrientes. Andalucía. Total servicios. Variació
+     ID: IAS4365 | Score: 0.556
+  2. Cifra de negocio a precios corrientes. Andalucía. Total servicios. Variació
+     ID: IAS3095 | Score: 0.556
+  3. Cifra de negocio a precios corrientes. Andalucía. Total servicios. Variació
+     ID: IAS4367 | Score: 0.545
+  4. Cifra de negocio a precios corrientes. Andalucía. Total servicios. Variació
+     ID: IAS3097 | Score: 0.545
+
+================================================================================
+PASO 3: Análisis de Correlación con Datos Provinciales
+================================================================================
+
+[1/5] Turismo: Población de Derecho: Málaga. Mujeres...
+     ✗ Datos insuficientes (10 puntos)
+
+[2/5] Turismo: Población de Derecho: Málaga del Fresno. Mujeres...
+     ✗ Datos insuficientes (10 puntos)
+
+[3/5] Turismo: Población de Derecho: Málaga. Ambos Sexos...
+     ✗ Datos insuficientes (10 puntos)
+
+[4/5] Turismo: Población de Derecho: Málaga del Fresno. Ambos Sexos...
+     ✗ Datos insuficientes (10 puntos)
+
+[5/5] Turismo: Población de Derecho: Málaga. Hombres...
+     ✗ Datos insuficientes (10 puntos)
+
+================================================================================
+RESULTADOS FINALES
+================================================================================
+
+⚠️  No se pudieron calcular correlaciones.
+
+Causas probables:
+  • El INE no tiene datos desagregados por provincia para todas las variables
+  • Las series encontradas no tienen períodos superpuestos
+  • Se requiere búsqueda más específica por código de operación
+
+Recomendación:
+  Explorar operaciones específicas del INE (EOH, IPV) manualmente

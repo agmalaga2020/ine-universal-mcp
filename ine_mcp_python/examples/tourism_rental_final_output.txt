@@ -1,0 +1,94 @@
+[0;93m2025-11-24 17:04:28.275834636 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+================================================================================
+ANÁLISIS REAL: Turismo vs Precios de Vivienda en España
+================================================================================
+
+✓ Índice semántico cargado: 34,390 series disponibles
+
+================================================================================
+PASO 1: Búsqueda Semántica - Turismo Internacional
+================================================================================
+/app/ine_mcp/embeddings/search.py:64: UserWarning: The model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 now uses mean pooling instead of CLS embedding. In order to preserve the previous behaviour, consider either pinning fastembed version to 0.5.1 or using `add_custom_model` functionality.
+  self._model = TextEmbedding(model_name=self.model_name)
+
+Encontradas 7 series únicas relacionadas con turismo:
+  1. Personal ocupado (mensual). Hostelería. Total Nacional. Ponderación. ...
+      ID: IAS4565 | Score: 0.591
+  2. Personal ocupado (mensual). Hostelería. Total Nacional. Ponderación. ...
+      ID: IAS3381 | Score: 0.591
+  3. Personal ocupado (mensual). Hostelería. Total Nacional. Variación anua...
+      ID: IAS4237 | Score: 0.588
+  4. Población de Derecho: Valencia de las Torres. Ambos Sexos...
+      ID: DPOD2323 | Score: 0.586
+  5. Población de Derecho: Villamayor de Santiago. Ambos Sexos...
+      ID: DPOD7300 | Score: 0.585
+  6. Personas ocupadas. Material de transporte. Comunitat Valenciana. Datos...
+      ID: EEEI9681 | Score: 0.583
+  7. Cifra de negocio a precios corrientes. Actividades de agencias de viaj...
+      ID: IAS4490 | Score: 0.613
+
+================================================================================
+PASO 2: Búsqueda Semántica - Precios de Vivienda/Alquiler
+================================================================================
+
+Encontradas 6 series únicas de precios de vivienda:
+  1. Cifra de negocio a precios corrientes. Actividades de alquiler. Total ...
+      ID: IAS4028 | Score: 0.571
+  2. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota...
+      ID: IAS3687 | Score: 0.562
+  3. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota...
+      ID: IAS3619 | Score: 0.562
+  4. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota...
+      ID: IAS4050 | Score: 0.550
+  5. Cifra de negocio a precios corrientes. Actividades de alquiler. Total ...
+      ID: IAS3601 | Score: 0.538
+  6. Cifra de negocio a precios corrientes. Actividades de alquiler. Total ...
+      ID: IAS3599 | Score: 0.526
+
+================================================================================
+PASO 3: Extracción y Análisis de Datos
+================================================================================
+
+--- Probando serie de turismo 1: Personal ocupado (mensual). Hostelería. Total Naci...
+    ✗ Datos insuficientes (4 puntos)
+
+--- Probando serie de turismo 2: Personal ocupado (mensual). Hostelería. Total Naci...
+    ✗ Datos insuficientes (8 puntos)
+
+--- Probando serie de turismo 3: Personal ocupado (mensual). Hostelería. Total Naci...
+    ✓ 60 puntos | 2020-09-30 a 2025-08-31
+
+================================================================================
+RESULTADOS FINALES
+================================================================================
+
+✓ Se encontraron 3 correlaciones válidas
+
+Top 5 correlaciones más fuertes:
+
+1. Correlación: 0.175
+   Turismo: Personal ocupado (mensual). Hostelería. Total Nacional. Vari
+   Vivienda: Cifra de negocio a precios corrientes. Actividades de alquil
+   Datos: 45 puntos desde 2021-12-31 a 2025-08-31
+   Interpretación: Correlación DÉBIL POSITIVA
+
+2. Correlación: -0.024
+   Turismo: Personal ocupado (mensual). Hostelería. Total Nacional. Vari
+   Vivienda: Cifra de negocio a precios corrientes. Actividades inmobilia
+   Datos: 45 puntos desde 2021-12-31 a 2025-08-31
+   Interpretación: Correlación DÉBIL NEGATIVA
+
+3. Correlación: -0.024
+   Turismo: Personal ocupado (mensual). Hostelería. Total Nacional. Vari
+   Vivienda: Cifra de negocio a precios corrientes. Actividades inmobilia
+   Datos: 45 puntos desde 2021-12-31 a 2025-08-31
+   Interpretación: Correlación DÉBIL NEGATIVA
+
+================================================================================
+CONCLUSIÓN
+================================================================================
+
+⚠️  La correlación encontrada es relativamente débil.
+   Esto podría indicar que otros factores tienen más impacto
+   en los precios de vivienda que el turismo solo.
+
