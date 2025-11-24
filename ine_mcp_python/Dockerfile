@@ -1,36 +1,45 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+# Hugging Face Spaces requirements:
+# - Run as user 1000 (security)
+# - Use port 7860 (standard)
+# - Write permissions on data directories
 
-# Instalar dependencias del sistema minimas
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Create non-root user for HF Spaces
+RUN useradd -m -u 1000 user
+USER user
 
-# Instalar uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.cargo/bin:$PATH"
+# Environment setup
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH \
+    PYTHONUNBUFFERED=1
 
-# Copiar TODO el código PRIMERO (necesario para -e . install)
-COPY pyproject.toml ./
-COPY ine_mcp ./ine_mcp/
-COPY scripts ./scripts/
+WORKDIR $HOME/app
 
-# Instalar el paquete con sus dependencias
-# -e . = editable install desde directorio actual
-# --system = instalar en Python del sistema (no venv)
-# --no-cache = reducir uso de memoria
-RUN uv pip install --system --no-cache -e .
+# Copy dependency files (leverage Docker cache)
+COPY --chown=user pyproject.toml uv.lock* ./
 
-# Crear directorio de datos
-RUN mkdir -p /app/data
+# Install uv and dependencies
+RUN pip install --no-cache-dir uv && \
+    uv pip install --system --no-cache -e .
 
-# TEMP: Commenting out index build to isolate Docker build issues
-# Index can be built at runtime or uploaded separately
-# RUN python scripts/build_index.py || echo "⚠️ WARNING: Index build failed. Server will start in degraded mode."
+# Copy application code
+COPY --chown=user ine_mcp ./ine_mcp
+COPY --chown=user scripts ./scripts
 
-# Exponer puerto
-EXPOSE 8000
+# Create data directory with write permissions
+RUN mkdir -p data
 
-# Ejecutar servidor (sin uv run, ya instalamos system-wide)
-CMD ["python", "-m", "ine_mcp.server"]
+# Build FAISS index during Docker build
+# HF Spaces has 16GB RAM - this will work!
+RUN python scripts/build_index.py || echo "⚠️  Index build failed, will retry at runtime"
+
+# Expose Hugging Face standard port
+EXPOSE 7860
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD python -c "import httpx; httpx.get('http://localhost:7860/health', timeout=5)" || exit 1
+
+# Run FastAPI server with Uvicorn
+CMD ["python", "-m", "uvicorn", "ine_mcp.server:app", "--host", "0.0.0.0", "--port", "7860", "--log-level", "info"]
