@@ -172,6 +172,16 @@ class CacheManager:
             logger.info("Cache: Using in-memory backend")
             self.backend = InMemoryBackend()
 
+    async def get(self, key: str) -> Any:
+        """Directly get value from cache without fetch fallback"""
+        cached_value = await self.backend.get(key)
+        if cached_value is not None:
+            try:
+                return json.loads(cached_value)
+            except json.JSONDecodeError:
+                return cached_value
+        return None
+
     async def get_or_fetch(
         self,
         key: str,
