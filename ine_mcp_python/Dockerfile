@@ -5,8 +5,26 @@ FROM python:3.11-slim
 # - Use port 7860 (standard)
 # - Write permissions on data directories
 
+# Set working directory
+WORKDIR /app
+
+# Copy application code and dependencies FIRST (as root)
+COPY pyproject.toml uv.lock* ./
+COPY ine_mcp ./ine_mcp
+COPY scripts ./scripts
+
+# Install dependencies as ROOT (before switching to user)
+RUN pip install --no-cache-dir uv && \
+    uv pip install --system --no-cache .
+
 # Create non-root user for HF Spaces
-RUN useradd -m -u 1000 user
+RUN useradd -m -u 1000 user && \
+    chown -R user:user /app
+
+# Create data directory with write permissions for user
+RUN mkdir -p /app/data && chown -R user:user /app/data
+
+# NOW switch to non-root user
 USER user
 
 # Environment setup
@@ -14,32 +32,8 @@ ENV HOME=/home/user \
     PATH=/home/user/.local/bin:$PATH \
     PYTHONUNBUFFERED=1
 
-WORKDIR $HOME/app
-
-# Copy application code and dependencies
-# (Must copy code BEFORE install for package to be found)
-COPY --chown=user pyproject.toml uv.lock* ./
-COPY --chown=user ine_mcp ./ine_mcp
-COPY --chown=user scripts ./scripts
-
-# Install uv and dependencies
-# Use regular install (not -e editable) for production Docker
-RUN pip install --no-cache-dir uv && \
-    uv pip install --system --no-cache .
-
-# Create data directory with write permissions
-RUN mkdir -p data
-
-# Build FAISS index during Docker build
-# HF Spaces has 16GB RAM - this will work!
-RUN python scripts/build_index.py || echo "⚠️  Index build failed, will retry at runtime"
-
 # Expose Hugging Face standard port
 EXPOSE 7860
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD python -c "import httpx; httpx.get('http://localhost:7860/health', timeout=5)" || exit 1
 
 # Run FastAPI server with Uvicorn
 CMD ["python", "-m", "uvicorn", "ine_mcp.server:app", "--host", "0.0.0.0", "--port", "7860", "--log-level", "info"]
