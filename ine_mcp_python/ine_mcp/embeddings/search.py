@@ -27,6 +27,7 @@ class SemanticSearchEngine:
     Much better than keyword matching which would miss these connections.
     """
 
+    # Nombre CORRECTO para FastEmbed (con el prefijo de la organización)
     DEFAULT_MODEL = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
     EMBEDDING_DIM = 384  # Dimension of the model above
 
