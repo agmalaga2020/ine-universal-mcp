@@ -25,9 +25,9 @@ RUN uv pip install --system --no-cache -e .
 # Crear directorio de datos
 RUN mkdir -p /app/data
 
-# Intentar construir índice FAISS durante build
-# Si falla (OOM/API down), continuar sin romper el deploy
-RUN python scripts/build_index.py || echo "⚠️ WARNING: Index build failed. Server will start in degraded mode."
+# TEMP: Commenting out index build to isolate Docker build issues
+# Index can be built at runtime or uploaded separately
+# RUN python scripts/build_index.py || echo "⚠️ WARNING: Index build failed. Server will start in degraded mode."
 
 # Exponer puerto
 EXPOSE 8000
