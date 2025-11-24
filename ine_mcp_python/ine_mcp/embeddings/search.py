@@ -177,13 +177,14 @@ class SemanticSearchEngine:
 
         # Encode query using FastEmbed
         query_embeddings = list(self.model.embed([query]))
-        query_embedding = np.array([query_embeddings[0]])  # Shape: (1, dim)
+        # CRITICAL: Must be float32 for FAISS compatibility
+        query_embedding = np.array([query_embeddings[0]], dtype=np.float32)  # Shape: (1, dim)
 
-        # Normalize for cosine similarity
+        # Normalize for cosine similarity (requires float32)
         faiss.normalize_L2(query_embedding)
 
-        # Search
-        scores, indices = self._index.search(query_embedding.astype(np.float32), top_k)
+        # Search (already float32, no conversion needed)
+        scores, indices = self._index.search(query_embedding, top_k)
 
         # Filter by threshold and format results
         results = []
