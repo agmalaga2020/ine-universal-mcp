@@ -1,0 +1,82 @@
+[0;93m2025-11-24 18:24:08.211455767 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+================================================================================
+ANÁLISIS: ¿Está la vivienda más cara que nunca en España?
+================================================================================
+
+✓ Índice cargado: 34,390 series
+
+================================================================================
+PASO 1: Búsqueda del Índice de Precios de Vivienda (IPV)
+================================================================================
+/app/ine_mcp/embeddings/search.py:64: UserWarning: The model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 now uses mean pooling instead of CLS embedding. In order to preserve the previous behaviour, consider either pinning fastembed version to 0.5.1 or using `add_custom_model` functionality.
+  self._model = TextEmbedding(model_name=self.model_name)
+
+Encontradas 10 series de IPV:
+  1. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+     ID: IAS3687 | Score: 0.660
+  2. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+     ID: IAS3619 | Score: 0.660
+  3. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+     ID: IAS4050 | Score: 0.628
+  4. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+     ID: IAS4033 | Score: 0.628
+  5. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+     ID: IAS3689 | Score: 0.591
+
+================================================================================
+PASO 2: Búsqueda de Salarios
+================================================================================
+
+Encontradas 10 series de salarios:
+  1. Nacional. Sueldos y salarios. Total industria.
+     ID: EEEI14229 | Score: 0.623
+  2. Sueldos y salarios. Total industria. Datos en euros
+     ID: EEEI5638 | Score: 0.601
+  3. Nacional. Horas trabajadas por el personal remunerado. Total industria
+     ID: EEEI13725 | Score: 0.598
+  4. Horas trabajadas por el personal remunerado. Total industria. Datos ba
+     ID: EEEI5579 | Score: 0.596
+  5. Sueldos y salarios. Madera y corcho. Datos en euros
+     ID: EEEI5594 | Score: 0.591
+
+================================================================================
+PASO 3: Búsqueda del IPC General
+================================================================================
+
+Encontradas 10 series de IPC:
+  1. Cifra de negocio a precios corrientes. Transporte y almacenamiento. Ba
+     ID: IAS701 | Score: 0.665
+  2. Cifra de negocio a precios corrientes. Transporte. Base 2005 CNAE-93. 
+     ID: IAS265 | Score: 0.648
+  3. Cifra de negocio a precios corrientes. Telecomunicaciones. Base 2005 C
+     ID: IAS237 | Score: 0.644
+  4. Cifra de negocio a precios corrientes. Telecomunicaciones. Base 2005 C
+     ID: IAS637 | Score: 0.637
+  5. Cifra de negocio a precios corrientes. Telecomunicaciones. Total Nacio
+     ID: IAS3631 | Score: 0.637
+
+================================================================================
+PASO 4: Extracción de Datos
+================================================================================
+
+📊 Obteniendo datos de vivienda...
+  ✓ Cifra de negocio a precios corrientes. Actividades inmobilia
+    45 puntos | 2021-12-31 → 2025-08-31
+
+💰 Obteniendo datos de salarios...
+  ✓ Sueldos y salarios. Total industria. Datos en euros
+    15 puntos | 1992-12-31 → 2006-12-31
+
+📈 Obteniendo datos del IPC...
+  ✓ Cifra de negocio a precios corrientes. Transporte y almacena
+    120 puntos | 2002-12-31 → 2012-11-30
+
+================================================================================
+PASO 5: Análisis de Poder Adquisitivo Inmobiliario
+================================================================================
+
+🔄 Alineando series temporalmente...
+/app/ine_mcp/tools/aggregation.py:205: FutureWarning: 'Y' is deprecated and will be removed in a future version, please use 'YE' instead.
+  resampled = df.resample(target_freq).agg(agg_func)
+  Frecuencia común IPV-Salario: Y
+  ✗ Datos superpuestos insuficientes: 0 puntos

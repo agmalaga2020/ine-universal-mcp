@@ -1,0 +1,29 @@
+================================================================================
+PRUEBA: Acceso a Tablas del INE
+================================================================================
+
+1. Probando IPV (Índice de Precios de Vivienda) - Tabla 24051
+--------------------------------------------------------------------------------
+  Solicitando datos...
+  ✓ Datos recibidos
+  Tipo: <class 'list'>
+
+2. Probando IPC General - Tabla 50902
+--------------------------------------------------------------------------------
+  Solicitando datos...
+  ✓ Datos recibidos
+  Tipo: <class 'list'>
+
+3. Probando Salarios - Tabla 10882
+--------------------------------------------------------------------------------
+  Solicitando datos...
+  ✓ Datos recibidos
+  Tipo: <class 'list'>
+
+================================================================================
+FIN DE LA PRUEBA
+================================================================================
+
+Si alguna tabla tiene datos, puedes copiarlos con:
+  docker cp ine_mcp_python-ine-mcp-1:/app/ipv_table_24051.json ./
+

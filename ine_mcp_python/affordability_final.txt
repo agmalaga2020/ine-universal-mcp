@@ -1,0 +1,42 @@
+[0;93m2025-11-24 18:26:34.541673869 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+================================================================================
+ANÁLISIS: Accesibilidad a la Vivienda en España (Histórico)
+================================================================================
+
+✓ Índice cargado: 34,390 series
+
+================================================================================
+PASO 1: Búsqueda de Series
+================================================================================
+
+🏠 Buscando IPV (Índice de Precios de Vivienda)...
+/app/ine_mcp/embeddings/search.py:64: UserWarning: The model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 now uses mean pooling instead of CLS embedding. In order to preserve the previous behaviour, consider either pinning fastembed version to 0.5.1 or using `add_custom_model` functionality.
+  self._model = TextEmbedding(model_name=self.model_name)
+Encontradas 6 series
+  1. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+  2. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+  3. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+  4. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+  5. Cifra de negocio a precios corrientes. Actividades inmobiliarias. Tota
+
+📊 Buscando IPC (Índice de Precios al Consumo)...
+Encontradas 0 series
+
+💰 Buscando datos de salarios/coste laboral...
+Encontradas 14 series
+  1. Nacional. Sueldos y salarios. Total industria.
+  2. Nacional. Otros gastos de personal. Total industria.
+  3. Cifra de negocio a precios corrientes. Actividades relacionadas con el
+  4. Cifra de negocio a precios corrientes. Actividades relacionadas con el
+  5. Cifra de negocio a precios corrientes. Base 2010. Actividades relacion
+
+================================================================================
+PASO 2: Extracción de Datos (probando múltiples series)
+================================================================================
+
+🏠 Probando series de vivienda...
+  [1] Cifra de negocio a precios corrientes. Actividades inmobilia... ✓ 45 puntos (2021-2025)
+
+📊 Probando series de IPC...
+
+  ⚠️  No se encontraron datos del IPC

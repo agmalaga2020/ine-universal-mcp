@@ -1,0 +1,8 @@
+================================================================================
+¿ESTÁ LA VIVIENDA MÁS CARA QUE NUNCA EN ESPAÑA?
+Análisis con datos oficiales del INE
+================================================================================
+
+PASO 1: Obteniendo Índice de Precios de Vivienda (IPV)
+--------------------------------------------------------------------------------
+✗ Error obteniendo IPV: 'Fecha'

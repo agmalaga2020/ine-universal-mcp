@@ -1,0 +1,45 @@
+================================================================================
+ANÁLISIS: ¿Está la vivienda más cara que nunca? (Método Directo)
+================================================================================
+
+PASO 1: Extracción de Datos con IDs Conocidos
+--------------------------------------------------------------------------------
+
+📊 IPC (Índice de Precios al Consumo)...
+  Probando ipc_general_2021 (IPC251856)... ✓ 300 puntos (2000-2025)
+
+🏠 IPV (Índice de Precios de Vivienda)...
+  Explorando operación IPV (30457)...
+[2025-11-24T18:28:03.046742] Unexpected error: Expecting value: line 1 column 1 (char 0)
+  ✗ Error: Unexpected error: Expecting value: line 1 column 1
+
+⚠️  No se pudo obtener IPV
+Continuando solo con análisis de IPC
+
+💰 Salarios/Coste Laboral...
+  Explorando operación 30134...
+[2025-11-24T18:28:03.339897] Unexpected error: Expecting value: line 1 column 1 (char 0)
+  ✗ Error: Unexpected error: Expecting value: line 
+  Explorando operación 30308...
+[2025-11-24T18:28:03.627919] Unexpected error: Expecting value: line 1 column 1 (char 0)
+  ✗ Error: Unexpected error: Expecting value: line 
+
+⚠️  No se pudieron obtener datos de salarios
+
+================================================================================
+ANÁLISIS
+================================================================================
+
+✓ Datos obtenidos:
+  • IPC: ipc_general_2021
+    300 puntos: 2000-10-31 → 2025-09-30
+
+================================================================================
+ANÁLISIS DEL IPC (Inflación Acumulada)
+================================================================================
+
+Período: 2000 - 2025
+IPC inicial: 4.10
+IPC actual:  3.10
+Inflación acumulada: -24.4%
+
