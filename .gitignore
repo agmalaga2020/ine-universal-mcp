@@ -1,27 +1,76 @@
-# Dependencies
-node_modules/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
 
 # Environment variables
 .env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Logs
 *.log
 logs/
 
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
 # Testing
-coverage/
-.nyc_output/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
 
-# Build
-dist/
-build/
+# Data and indexes (FAISS)
+*.bin
+*.pkl
+*.index
+data/*.bin
+data/*.pkl
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Docker
+.dockerignore
+
+# Redis dumps
+dump.rdb
+
+# Temporary files
+*.tmp
+*.bak
+*.cache

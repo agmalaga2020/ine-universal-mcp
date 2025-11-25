@@ -35,6 +35,7 @@ A production-grade Model Context Protocol (MCP) server providing universal acces
 2. **get_series_data**: Fetch time series with intelligent aggregation
 3. **analyze_correlation**: Correlation analysis with frequency alignment
 4. **get_operations**: List available INE operations
+5. **get_table_data**: Access INE tables directly (e.g., Housing Price Index - IPV)
 
 ## 🏗️ Architecture
 
