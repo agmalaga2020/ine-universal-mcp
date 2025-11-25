@@ -275,6 +275,17 @@ async def list_tools() -> list[Tool]:
                 "properties": {},
             },
         ),
+        Tool(
+            name="get_table_data",
+            description="Get raw data from a specific INE table (JSON-stat format). Use for complex datasets like Housing Prices (IPV).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "table_id": {"type": "string", "description": "Table ID (e.g. '25171')"},
+                },
+                "required": ["table_id"],
+            },
+        ),
     ]
 
 
@@ -495,10 +506,27 @@ async def call_tool(name: str, arguments: Dict[str, Any]) -> list[TextContent]:
             await cache.set(cache_key, result, ttl=86400)  # Cache for 24 hours
             return [TextContent(type="text", text=result)]
 
+        # ===== GET TABLE DATA =====
+        elif name == "get_table_data":
+            table_id = arguments["table_id"]
+            cache_key = f"table:{table_id}"
+            
+            # Check cache
+            cached = await cache.get(cache_key)
+            if cached:
+                return [TextContent(type="text", text=cached)]
+
+            async with INEClient() as client:
+                data = await client.get_table_data(table_id)
+            
+            result = json.dumps(data, indent=2, default=str)
+            await cache.set(cache_key, result, ttl=86400)
+            return [TextContent(type="text", text=result)]
+
         else:
             return [TextContent(type="text", text=json.dumps({
                 "error": f"Unknown tool: {name}",
-                "available_tools": ["search_series_semantic", "get_series_data", "analyze_correlation", "get_operations"],
+                "available_tools": ["search_series_semantic", "get_series_data", "analyze_correlation", "get_operations", "get_table_data"],
             }))]
 
     except INEAPIError as e:
