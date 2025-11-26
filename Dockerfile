@@ -1,5 +1,6 @@
 FROM python:3.11-slim
 
+# Hugging Face Spaces deployment - Version 2.0 with get_table_data tool
 # Hugging Face Spaces requirements:
 # - Run as user 1000 (security)
 # - Use port 7860 (standard)
